@@ -1,0 +1,30 @@
+version: '3.9'
+
+services:
+  backend:
+    build: ./backend/product-system 
+    command: node server.js
+    environment:
+      - DB_HOST=db
+      - DB_USER=root
+      - DB_PASS=1234
+      - DB_NAME=productpnc 
+    ports:
+      - "3500:3000"
+    depends_on:
+      - db
+    volumes:
+      - ./backend/product-system/uploads:/usr/src/app/uploads
+      - ./backend/product-system/public/pdfs:/usr/src/app/public/pdfs
+
+  db:
+    image: mysql:8.0
+    container_name: mysql-productpnc
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 1234
+      MYSQL_DATABASE: productpnc
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./db:/docker-entrypoint-initdb.d

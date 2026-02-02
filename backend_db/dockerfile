@@ -1,0 +1,20 @@
+#base image
+FROM node:20-alpine
+
+#ตั้งค่า working directory ภายใน image 
+WORKDIR /usr/src/app
+
+# คัดลอก file ที่จำเป็นเข้า image
+COPY package*.json ./
+
+# ติดตั้ง dependencies
+RUN npm install --production
+
+# คัดลอกไฟล์โปรเจกต์ทั้งหมดไป container
+COPY . .
+
+# เปิดพอร์ต 3000
+EXPOSE 3000
+
+# สั่งรัน server.js
+CMD ["node", "server.js"]
